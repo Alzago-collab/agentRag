@@ -7,10 +7,10 @@ Ce dossier contient le code source principal :
 - Les pipelines de récupération et de génération
 
 ## Modules présents
-- agent.js
-- moteur.js
-- indexation.js
-- ui.js
+- agent.js (orchestrateur session, logs)
+- moteur.js (pipeline RAG)
+- indexation.js (découpe et vectorisation)
+- ui.js (gestion interface utilisateur)
 
 ## Étapes
 - [x] Définir la structure des modules (agent, moteur, pipelines)
@@ -18,7 +18,17 @@ Ce dossier contient le code source principal :
 - [x] Implémenter le pipeline principal du moteur RAG (processRAGQuestion)
 - [x] UI utilisateur complète connectée au moteur (template.html + style + ui.js)
 - [x] Gestion historique conversation (localStorage)
-- [ ] Documenter chaque module
+- [x] Structure agent.js (init, logs, début orchestrateur pipeline)
+- [x] Premières fonctions indexation.js (chunk + vectorise)
+- [ ] Pipeline agent/chat avancé, indexation auto multi-docs, feedback utilisateur
+
+---
+
+### Plan pour la suite :
+- Finaliser agent.js pour analytics/profil + intégration directe avec le moteur
+- Développer pipelineIndexationAuto (batch, multi-fichiers, export vectorStore)
+- Ajouter feedback utilisateur, monitoring, adaptation dynamique
+- Documenter chaque module
 
 ## 🚩 TODO moteur RAG (`moteur.js`)
 - [x] Créer squelette du fichier
