@@ -1,1 +1,29 @@
-<!-- Template HTML principal -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent RAG Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="branding">
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>RAGBuilder Assistant</h1>
+    <p class="subtitle">Chatbot IA sécurisé & privé – Propulsé par Ollama</p>
+  </header>
+  <main class="chat-container">
+    <div id="chat-history" class="chat-history">
+      <!-- Messages s'ajouteront ici -->
+    </div>
+    <form id="chat-form" class="chat-form">
+      <input type="text" id="user-input" placeholder="Posez votre question…" autocomplete="off" required>
+      <button type="submit">Envoyer</button>
+    </form>
+  </main>
+  <footer class="footer">
+    <span>© 2025 RAGBuilder | Confidential – Prêt pour l’entreprise</span>
+  </footer>
+  <script type="module" src="../src/ui.js"></script>
+</body>
+</html>
