@@ -10,6 +10,7 @@ Ce dossier contient le code source principal :
 - agent.js (orchestrateur session, logs)
 - moteur.js (pipeline RAG)
 - indexation.js (découpe et vectorisation auto)
+- indexation-ui.js (liaison UI pour indexation)
 - ui.js (gestion interface utilisateur)
 
 ## Étapes
@@ -20,6 +21,7 @@ Ce dossier contient le code source principal :
 - [x] Gestion historique conversation (localStorage)
 - [x] Structure agent.js (init, logs, début orchestrateur pipeline)
 - [x] Pipeline d'indexation auto JS (upload → découpe → vectorisation → export vectors.json)
+- [x] Intégration interface : indexation documentaire accessible/feedback via UI web
 - [ ] Pipeline agent/chat avancé, feedback utilisateur, documentation JS
 
 ---

@@ -13,6 +13,14 @@
     <p class="subtitle">Chatbot IA sécurisé & privé – Propulsé par Ollama</p>
   </header>
   <main class="chat-container">
+    <section id="indexation-block" class="indexation-block">
+      <h2>Indexation documentaire (vectorisation)</h2>
+      <input type="file" id="index-file" accept=".txt,.json" multiple>
+      <button id="btn-indexer">Indexer & vectoriser</button>
+      <button id="btn-download" disabled>Télécharger vectors.json</button>
+      <div id="index-log" class="index-log"></div>
+    </section>
+    <hr>
     <div id="chat-history" class="chat-history">
       <!-- Messages s'ajouteront ici -->
     </div>
@@ -25,5 +33,6 @@
     <span>© 2025 RAGBuilder | Confidential – Prêt pour l’entreprise</span>
   </footer>
   <script type="module" src="../src/ui.js"></script>
+  <script type="module" src="../src/indexation-ui.js"></script>
 </body>
 </html>
