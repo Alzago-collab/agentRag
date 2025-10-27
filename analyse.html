@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 1 - Analyse | RAGBuilder Assistant</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>📋 Phase 1 - Analyse des besoins</h1>
+            <div class="progress-bar">
+                <div class="progress" style="width: 16.67%"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="phase-content">
+                <h2>Comprendre votre projet RAG</h2>
+                <p>Cette étape nous aide à définir les objectifs et les sources de données pour votre chatbot.</p>
+
+                <form id="analyseForm" class="form-container">
+                    <div class="form-group">
+                        <label for="entreprise">Nom de l'entreprise *</label>
+                        <input type="text" id="entreprise" name="entreprise" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="casUsage">Cas d'usage principal *</label>
+                        <textarea id="casUsage" name="casUsage" rows="3" required 
+                                  placeholder="Ex: Support client, FAQ interne, Documentation technique..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sources">Sources de données disponibles</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="sources" value="pdf"> Documents PDF</label>
+                            <label><input type="checkbox" name="sources" value="docx"> Documents Word</label>
+                            <label><input type="checkbox" name="sources" value="txt"> Fichiers texte</label>
+                            <label><input type="checkbox" name="sources" value="web"> Pages web</label>
+                            <label><input type="checkbox" name="sources" value="db"> Base de données</label>
+                            <label><input type="checkbox" name="sources" value="api"> APIs externes</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ton">Ton de communication souhaité</label>
+                        <select id="ton" name="ton">
+                            <option value="professionnel">Professionnel</option>
+                            <option value="amical">Amical</option>
+                            <option value="technique">Technique</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="langues">Langues supportées</label>
+                        <input type="text" id="langues" name="langues" placeholder="Ex: Français, Anglais">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="utilisateurs">Nombre d'utilisateurs estimé</label>
+                        <select id="utilisateurs" name="utilisateurs">
+                            <option value="<10">Moins de 10</option>
+                            <option value="10-50">10 à 50</option>
+                            <option value="50-200">50 à 200</option>
+                            <option value="200+">Plus de 200</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="backBtn" class="btn btn-secondary">Retour</button>
+                        <button type="submit" class="btn btn-primary">Continuer vers la préparation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/analyse.js"></script>
+</body>
+</html>

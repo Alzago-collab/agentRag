@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 4 - Moteur RAG | RAGBuilder Assistant</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>⚙️ Phase 4 - Moteur RAG</h1>
+            <div class="progress-bar">
+                <div class="progress" style="width: 66.67%"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="phase-content">
+                <h2>Configuration du moteur de génération</h2>
+                <p>Configurez le système de récupération et de génération de réponses.</p>
+
+                <div class="config-section">
+                    <h3>Configuration du modèle de génération</h3>
+                    
+                    <div class="form-group">
+                        <label for="llmModel">Modèle de génération</label>
+                        <select id="llmModel" name="llmModel">
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="gpt-4" selected>GPT-4</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                            <option value="claude-3-opus">Claude 3 Opus</option>
+                            <option value="local">Modèle local (Ollama)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temperature">Température (créativité)</label>
+                        <input type="range" id="temperature" name="temperature" min="0" max="1" step="0.1" value="0.7">
+                        <span id="temperatureValue">0.7</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxTokens">Nombre maximum de tokens</label>
+                        <input type="number" id="maxTokens" name="maxTokens" value="1000" min="100" max="4000">
+                    </div>
+                </div>
+
+                <div class="retrieval-section">
+                    <h3>Configuration de la récupération</h3>
+                    
+                    <div class="form-group">
+                        <label for="topK">Nombre de documents à récupérer</label>
+                        <input type="number" id="topK" name="topK" value="5" min="1" max="20">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="similarityThreshold">Seuil de similarité</label>
+                        <input type="range" id="similarityThreshold" name="similarityThreshold" min="0" max="1" step="0.1" value="0.7">
+                        <span id="similarityValue">0.7</span>
+                    </div>
+                </div>
+
+                <div class="prompt-section">
+                    <h3>Template de prompt</h3>
+                    <div class="form-group">
+                        <label for="systemPrompt">Prompt système</label>
+                        <textarea id="systemPrompt" name="systemPrompt" rows="4">Vous êtes un assistant IA spécialisé dans l'aide aux utilisateurs. Répondez de manière précise et utile en vous basant sur les documents fournis. Si vous ne trouvez pas d'information pertinente, dites-le clairement.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userPromptTemplate">Template de prompt utilisateur</label>
+                        <textarea id="userPromptTemplate" name="userPromptTemplate" rows="3">Contexte: {context}
+
+Question: {question}
+
+Répondez en vous basant sur le contexte fourni.</textarea>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Test du moteur RAG</h3>
+                    <div class="form-group">
+                        <label for="testQuestion">Question de test</label>
+                        <input type="text" id="testQuestion" name="testQuestion" 
+                               placeholder="Ex: Comment fonctionne notre politique de remboursement ?">
+                    </div>
+                    
+                    <button id="testRagBtn" class="btn btn-primary">Tester le moteur RAG</button>
+                </div>
+
+                <div class="test-results" id="testResults" style="display: none;">
+                    <h4>Résultat du test :</h4>
+                    <div id="ragResponse"></div>
+                    <div id="ragSources"></div>
+                </div>
+
+                <div class="form-actions" id="formActions" style="display: none;">
+                    <button type="button" id="backBtn" class="btn btn-secondary">Retour</button>
+                    <button type="button" id="continueBtn" class="btn btn-primary">Continuer vers l'interface</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/moteur.js"></script>
+</body>
+</html>

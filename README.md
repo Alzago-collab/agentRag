@@ -20,9 +20,9 @@ Sur GitHub / GitLab / Bitbucket, les cases ci-dessous sont cliquables.
 Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` pour marquer comme fait.
 
 ### Phase 0 — Préparation du projet
-- [ ] Créer le repo ragbuilder-assistant
-- [ ] Initialiser la structure de dossiers (frontend/, backend/, scripts/, docs/)
-- [ ] Ajouter .gitignore, README.md, LICENSE
+- [x] Créer le repo ragbuilder-assistant
+- [x] Initialiser la structure de dossiers (frontend/, backend/, scripts/, docs/)
+- [x] Ajouter .gitignore, README.md, LICENSE
 - [ ] Mettre en place un environnement de test local (simple http-server ou live-server)
 
 ### Phase 1 — Analyse (Discovery)
@@ -71,10 +71,10 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 ## 📦 Livrables par sprint (1 sprint = version minimale utilisable)
 
 ### Sprint 0 (MVP)
-- [ ] index.html, analyse.html, dataprep.html, recap.html
-- [ ] js/main.js, js/analyse.js, js/dataprep.js, js/recap.js
-- [ ] css/style.css
-- [ ] Export rag_config.json fonctionnel
+- [x] index.html, analyse.html, dataprep.html, recap.html
+- [x] js/main.js, js/analyse.js, js/dataprep.js, js/recap.js
+- [x] css/style.css
+- [x] Export rag_config.json fonctionnel
 
 ### Sprint 1 (Fonctionnel)
 - [ ] Mini retriever + moteur simulé
@@ -108,6 +108,41 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 - PRs doivent inclure une checklist de tests.
 - Ajouter tests unitaires simples côté JS pour les fonctions critiques (parsing, export).
 
+## 📚 Structure du projet
+
+```
+ragbuilder-assistant/
+│
+├── index.html                # Page d'accueil
+├── analyse.html              # Étape 1 : Analyse des besoins
+├── dataprep.html             # Étape 2 : Préparation des données
+├── indexation.html           # Étape 3 : Vectorisation
+├── moteur.html               # Étape 4 : Moteur RAG
+├── interface.html             # Étape 5 : Interface / déploiement
+├── recap.html                # Étape finale : Résumé et export
+│
+├── css/
+│   └── style.css             # Styles CSS principaux
+│
+├── js/
+│   ├── main.js               # Gestion de la navigation et logique globale
+│   ├── analyse.js            # Logique spécifique à l'étape Analyse
+│   ├── dataprep.js           # Logique de préparation des données
+│   ├── indexation.js         # Logique d'indexation vectorielle
+│   ├── moteur.js             # Logique du moteur RAG
+│   ├── interface.js          # Logique de l'interface utilisateur
+│   └── recap.js              # Logique de finalisation et export
+│
+└── assets/
+    ├── config/               # Fichiers de configuration
+    │   ├── default-config.json
+    │   └── themes.json
+    ├── icons/                # Icônes de l'interface
+    ├── images/               # Images d'illustration
+    ├── docs/                 # Documentation
+    └── scripts/              # Scripts utilitaires
+```
+
 ## 📚 Fichiers importants
 - `index.html` — accueil
 - `analyse.html` — étape 1
@@ -118,4 +153,4 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 - `recap.html` — résumé & export
 - `css/style.css` — styles
 - `js/*.js` — logique front-end
-- `docs/RAGBuilder_Methodologie.md` — méthode complète
+- `assets/config/` — fichiers de configuration

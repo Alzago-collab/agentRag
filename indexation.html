@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 3 - Indexation | RAGBuilder Assistant</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔍 Phase 3 - Indexation vectorielle</h1>
+            <div class="progress-bar">
+                <div class="progress" style="width: 50%"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="phase-content">
+                <h2>Création des embeddings et stockage vectoriel</h2>
+                <p>Transformons vos documents en vecteurs pour permettre la recherche sémantique.</p>
+
+                <div class="config-section">
+                    <h3>Configuration de l'indexation</h3>
+                    
+                    <div class="form-group">
+                        <label for="embeddingModel">Modèle d'embeddings</label>
+                        <select id="embeddingModel" name="embeddingModel">
+                            <option value="text-embedding-ada-002">OpenAI text-embedding-ada-002</option>
+                            <option value="text-embedding-3-small">OpenAI text-embedding-3-small</option>
+                            <option value="text-embedding-3-large">OpenAI text-embedding-3-large</option>
+                            <option value="sentence-transformers">Sentence Transformers (local)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vectorStore">Type de stockage vectoriel</label>
+                        <select id="vectorStore" name="vectorStore">
+                            <option value="chroma">ChromaDB (recommandé)</option>
+                            <option value="pinecone">Pinecone</option>
+                            <option value="weaviate">Weaviate</option>
+                            <option value="local">Stockage local (JSON)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collectionName">Nom de la collection</label>
+                        <input type="text" id="collectionName" name="collectionName" 
+                               placeholder="Ex: documents-entreprise-2025">
+                    </div>
+                </div>
+
+                <div class="indexing-section" id="indexingSection">
+                    <button id="startIndexingBtn" class="btn btn-primary">Commencer l'indexation</button>
+                </div>
+
+                <div class="progress-section" id="progressSection" style="display: none;">
+                    <h3>Progression de l'indexation</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar-detailed">
+                            <div class="progress-detailed" id="detailedProgress"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">0%</div>
+                    </div>
+                    
+                    <div class="logs-container">
+                        <h4>Logs d'indexation :</h4>
+                        <div id="indexingLogs" class="logs"></div>
+                    </div>
+                </div>
+
+                <div class="results-section" id="indexingResults" style="display: none;">
+                    <h3>Résultats de l'indexation</h3>
+                    <div id="indexingStats"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="backBtn" class="btn btn-secondary">Retour</button>
+                        <button type="button" id="continueBtn" class="btn btn-primary">Continuer vers le moteur RAG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/indexation.js"></script>
+</body>
+</html>

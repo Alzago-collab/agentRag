@@ -1,0 +1,73 @@
+{
+  "themes": {
+    "light": {
+      "name": "Clair",
+      "colors": {
+        "primary": "#2563eb",
+        "secondary": "#64748b",
+        "background": "#f8fafc",
+        "surface": "#ffffff",
+        "text": "#1e293b",
+        "border": "#e2e8f0"
+      }
+    },
+    "dark": {
+      "name": "Sombre",
+      "colors": {
+        "primary": "#3b82f6",
+        "secondary": "#94a3b8",
+        "background": "#0f172a",
+        "surface": "#1e293b",
+        "text": "#f1f5f9",
+        "border": "#475569"
+      }
+    },
+    "blue": {
+      "name": "Bleu professionnel",
+      "colors": {
+        "primary": "#1e40af",
+        "secondary": "#3b82f6",
+        "background": "#ffffff",
+        "surface": "#f8fafc",
+        "text": "#1e293b",
+        "border": "#93c5fd"
+      }
+    },
+    "green": {
+      "name": "Vert nature",
+      "colors": {
+        "primary": "#059669",
+        "secondary": "#10b981",
+        "background": "#ffffff",
+        "surface": "#f0fdf4",
+        "text": "#1e293b",
+        "border": "#6ee7b7"
+      }
+    },
+    "purple": {
+      "name": "Violet créatif",
+      "colors": {
+        "primary": "#7c3aed",
+        "secondary": "#a855f7",
+        "background": "#ffffff",
+        "surface": "#faf5ff",
+        "text": "#1e293b",
+        "border": "#c4b5fd"
+      }
+    }
+  },
+  "chatStyles": {
+    "modern": {
+      "name": "Moderne",
+      "description": "Interface moderne avec des coins arrondis et des ombres"
+    },
+    "classic": {
+      "name": "Classique",
+      "description": "Interface traditionnelle avec des lignes droites"
+    },
+    "minimal": {
+      "name": "Minimaliste",
+      "description": "Interface épurée avec un design minimal"
+    }
+  }
+}
