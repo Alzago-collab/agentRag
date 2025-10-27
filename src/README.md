@@ -16,6 +16,7 @@ Ce dossier contient le code source principal :
 - [x] Définir la structure des modules (agent, moteur, pipelines)
 - [x] Créer les modules JS principaux
 - [x] Implémenter le pipeline principal du moteur RAG (processRAGQuestion)
+- [x] UI utilisateur complète connectée au moteur (template.html + style + ui.js)
 - [ ] Documenter chaque module
 
 ## 🚩 TODO moteur RAG (`moteur.js`)
@@ -28,4 +29,6 @@ Ce dossier contient le code source principal :
 - [x] Interroger API génération
 - [x] Exporter la fonction principale du moteur (processRAGQuestion)
 
-La fonction `processRAGQuestion(question)` réalise l'ensemble de la chaîne : embedding → search topK → construction du prompt → génération de la réponse contextualisée.
+La fonction `processRAGQuestion(question)` réalise l'ensemble de la chaîne : embedding → search topK → construction du prompt → génération de la réponse contextualisée. 
+
+L'interface utilisateur (template.html) permet un cycle complet question (user) → moteur RAG JS → affichage réponse stylée.

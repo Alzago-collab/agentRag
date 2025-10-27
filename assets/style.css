@@ -1,1 +1,108 @@
-/* Style de base */
+body {
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  color: #1a202c;
+  margin: 0;
+  min-height: 100vh;
+}
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 2rem 1rem;
+  background: #1f2937;
+  color: #fff;
+  border-bottom: 5px solid #7dd3fc;
+}
+.logo {
+  width: 54px;
+  height: 54px;
+}
+.branding h1 {
+  font-size: 2.2rem;
+  margin: 0;
+}
+.subtitle {
+  font-size: 1rem;
+  color: #bae6fd;
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 550px;
+  margin: 2rem auto;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 38px -14px rgba(31,41,55,0.08);
+  min-height: 400px;
+}
+.chat-history {
+  flex: 1;
+  padding: 2rem 1.5rem 1rem;
+  overflow-y: auto;
+}
+.message {
+  margin-bottom: 1.2em;
+  display: flex;
+  gap: 0.7em;
+}
+.message.user {
+  justify-content: flex-end;
+}
+.bubble {
+  padding: 0.85em 1.2em;
+  border-radius: 18px;
+  max-width: 85%;
+  line-height: 1.5;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 18px -6px #bae6fd44;
+}
+.bubble.user {
+  background: linear-gradient(135deg, #bae6fd 0%, #38bdf8 100%);
+  color: #10263e;
+  border-bottom-right-radius: 6px;
+}
+.bubble.bot {
+  background: #f1f5f9;
+  color: #1e293b;
+  border-bottom-left-radius: 6px;
+}
+.chat-form {
+  display: flex;
+  padding: 1rem 1.5rem 1.2rem;
+  background: transparent;
+  border-top: 1px solid #e0e7ef;
+  gap: 1rem;
+}
+#user-input {
+  flex: 1;
+  padding: 0.9em 1.1em;
+  border-radius: 8px;
+  border: 1.5px solid #7dd3fc;
+  font-size: 1.1rem;
+}
+button[type="submit"] {
+  background: linear-gradient(90deg, #38bdf8 0%, #0891b2 90%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 1.4em;
+  font-weight: 600;
+  font-size: 1.09rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px -3px #7dd3fc88;
+  transition: background 0.2s;
+}
+button[type="submit"]:hover {
+  background: linear-gradient(90deg, #0ea5e9 0%, #06b6d4 100%);
+}
+.footer {
+  text-align: center;
+  font-size: 0.98em;
+  color: #94a3b8;
+  padding: 2em 0 1em 0;
+}
+@media (max-width: 700px) {
+  .chat-container { max-width: 98vw; margin: 0; border-radius: 0; }
+  .branding { flex-direction: column; gap: 0.4em; padding: 1.2em 1em 0.5em; }
+}
