@@ -28,12 +28,37 @@ async function vectoriseChunks(chunks, model = 'nomic-embed-text') {
 }
 
 /**
- * Stub/placeholder pour la pipeline d'indexation automatique complète
- * - Lire .txt/.json
- * - Découper en chunks
- * - Vectoriser
- * - Exporter le JSON final dans le dossier /data
+ * Pipeline d'indexation automatique : upload fichier, découpe, vectorisation, export JSON vectorStore.
+ * @param {File} fichier
+ * @param {number} tailleChunk
+ * @returns {Promise<Array<{id:number, text:string, vector:Array<number>}>>}
  */
-// TODO: pipelineIndexationAuto(fichierSource)
+async function pipelineIndexationAuto(fichier, tailleChunk = 500) {
+  const txt = await fichier.text();
+  const chunks = decoupeEnChunks(txt, tailleChunk);
+  const vectors = await vectoriseChunks(chunks);
+  // Formate [{id, text, vector}]
+  return vectors.map((v, i) => ({ id: i+1, text: v.text, vector: v.vector }));
+}
 
-export { decoupeEnChunks, vectoriseChunks };
+/**
+ * Lance le download du vectorStore JSON côté navigateur (save as ...).
+ * @param {Array} data
+ * @param {string} nomFichier
+ */
+function saveVectorStore(data, nomFichier = 'vectors.json') {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = nomFichier;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// TODO :
+// - Support multi-fichiers (batch)
+// - Support PDF/Docx, extraction texte avant découpe
+// - ProgressBar, logs UI
+
+export { decoupeEnChunks, vectoriseChunks, pipelineIndexationAuto, saveVectorStore };
