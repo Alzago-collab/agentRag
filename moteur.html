@@ -23,25 +23,19 @@
                 <p>Configurez le système de récupération et de génération de réponses.</p>
 
                 <div class="config-section">
-                    <h3>Configuration du modèle de génération</h3>
+                    <h3>Configuration du modèle Ollama</h3>
                     
                     <div class="form-group">
-                        <label for="llmModel">Modèle de génération</label>
+                        <label for="llmModel">Modèle de génération Ollama</label>
                         <select id="llmModel" name="llmModel">
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                            <option value="gpt-4" selected>GPT-4</option>
-                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                            <option value="gpt-4o">GPT-4o</option>
-                            <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-                            <option value="claude-3-opus">Claude 3 Opus</option>
+                            <option value="llama3.1">llama3.1</option>
+                            <option value="llama3.1:8b">llama3.1:8b</option>
+                            <option value="llama3.1:70b">llama3.1:70b</option>
+                            <option value="mistral">mistral</option>
+                            <option value="codellama">codellama</option>
+                            <option value="phi3">phi3</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="anthropicKey">Clé API Anthropic (si Claude)</label>
-                        <input type="password" id="anthropicKey" name="anthropicKey" 
-                               placeholder="sk-ant-..." class="api-key-field">
-                        <small class="help-text">Obligatoire si vous utilisez Claude</small>
+                        <small class="help-text">Le modèle sera chargé depuis votre configuration précédente</small>
                     </div>
 
                     <div class="form-group">

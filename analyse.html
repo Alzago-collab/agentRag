@@ -72,30 +72,43 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="openaiKey">Clé API OpenAI *</label>
-                        <input type="password" id="openaiKey" name="openaiKey" required 
-                               placeholder="sk-..." class="api-key-field">
-                        <small class="help-text">Nécessaire pour les embeddings et la génération de texte</small>
+                        <label for="ollamaUrl">URL Ollama *</label>
+                        <input type="url" id="ollamaUrl" name="ollamaUrl" required 
+                               value="http://localhost:11434" placeholder="http://localhost:11434">
+                        <small class="help-text">URL de votre instance Ollama locale</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="embeddingModel">Modèle d'embeddings Ollama</label>
+                        <select id="embeddingModel" name="embeddingModel">
+                            <option value="nomic-embed-text">nomic-embed-text</option>
+                            <option value="mxbai-embed-large">mxbai-embed-large</option>
+                            <option value="all-minilm">all-minilm</option>
+                        </select>
+                        <small class="help-text">Assurez-vous que le modèle est installé : <code>ollama pull nomic-embed-text</code></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="llmModel">Modèle de génération Ollama</label>
+                        <select id="llmModel" name="llmModel">
+                            <option value="llama3.1">llama3.1</option>
+                            <option value="llama3.1:8b">llama3.1:8b</option>
+                            <option value="llama3.1:70b">llama3.1:70b</option>
+                            <option value="mistral">mistral</option>
+                            <option value="codellama">codellama</option>
+                            <option value="phi3">phi3</option>
+                        </select>
+                        <small class="help-text">Assurez-vous que le modèle est installé : <code>ollama pull llama3.1</code></small>
                     </div>
 
                     <div class="form-group">
                         <label for="vectorDbType">Type de base de données vectorielle</label>
                         <select id="vectorDbType" name="vectorDbType">
                             <option value="chroma">ChromaDB (local)</option>
-                            <option value="pinecone">Pinecone (cloud)</option>
-                            <option value="weaviate">Weaviate (cloud)</option>
-                            <option value="qdrant">Qdrant (cloud)</option>
+                            <option value="qdrant">Qdrant (local)</option>
+                            <option value="weaviate">Weaviate (local)</option>
                         </select>
-                    </div>
-
-                    <div class="form-group" id="pineconeConfig" style="display: none;">
-                        <label for="pineconeKey">Clé API Pinecone</label>
-                        <input type="password" id="pineconeKey" name="pineconeKey" placeholder="Votre clé Pinecone">
-                    </div>
-
-                    <div class="form-group" id="weaviateConfig" style="display: none;">
-                        <label for="weaviateUrl">URL Weaviate</label>
-                        <input type="url" id="weaviateUrl" name="weaviateUrl" placeholder="https://votre-cluster.weaviate.network">
+                        <small class="help-text">Toutes les options sont locales, aucune clé API requise</small>
                     </div>
 
                     <div class="form-actions">

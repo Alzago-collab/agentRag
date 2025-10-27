@@ -99,12 +99,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Processus RAG réel
     async function simulateRAGProcess(question, config) {
-        // Vérifier les clés API
+        // Vérifier la configuration Ollama
         const analyseData = dataManager.getPhaseData('analyse');
         const dataprepData = dataManager.getPhaseData('dataprep');
         
-        if (!analyseData.openaiKey) {
-            throw new Error('Clé API OpenAI requise');
+        if (!analyseData.ollamaUrl) {
+            throw new Error('URL Ollama requise');
         }
         
         if (!dataprepData.collectionName) {
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Étape 1: Recherche de documents (simulation pour l'instant)
         Utils.showInfo('Recherche de documents pertinents...');
-        const retrievedDocs = await searchDocumentsReal(question, config.topK, analyseData.openaiKey, config.embeddingModel);
+        const retrievedDocs = await searchDocumentsOllama(question, config.topK, analyseData.ollamaUrl, analyseData.embeddingModel);
         
         // Filtrer par seuil de similarité
         const filteredDocs = retrievedDocs.filter(doc => doc.score >= config.similarityThreshold);
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Étape 3: Génération de la réponse
         Utils.showInfo('Génération de la réponse...');
-        const response = await generateResponseReal(question, context, config, analyseData);
+        const response = await generateResponseOllama(question, context, config, analyseData);
         
         return {
             question,
@@ -138,41 +138,40 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // Fonction de recherche réelle de documents
-    async function searchDocumentsReal(question, topK, apiKey, embeddingModel) {
+    // Fonction de recherche avec Ollama
+    async function searchDocumentsOllama(question, topK, ollamaUrl, embeddingModel) {
         try {
-            // Créer l'embedding de la question
-            const response = await fetch('https://api.openai.com/v1/embeddings', {
+            // Créer l'embedding de la question avec Ollama
+            const response = await fetch(`${ollamaUrl}/api/embeddings`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${apiKey}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: embeddingModel,
-                    input: question
+                    prompt: question
                 })
             });
             
             if (!response.ok) {
-                throw new Error(`Erreur API OpenAI: ${response.status}`);
+                throw new Error(`Erreur Ollama: ${response.status}`);
             }
             
             const data = await response.json();
-            const questionEmbedding = data.data[0].embedding;
+            const questionEmbedding = data.embedding;
             
             // Pour l'instant, retourner des documents simulés
-            // En production, utiliser votre base vectorielle (ChromaDB, Pinecone, etc.)
+            // En production, utiliser votre base vectorielle locale (ChromaDB, Qdrant, etc.)
             return [
                 {
                     id: 1,
-                    content: "Document pertinent trouvé pour votre question. Ceci est un exemple de contenu récupéré.",
+                    content: "Document pertinent trouvé pour votre question. Ceci est un exemple de contenu récupéré depuis votre base vectorielle locale.",
                     source: "document1.pdf",
                     score: 0.95
                 },
                 {
                     id: 2,
-                    content: "Autre document pertinent avec des informations complémentaires.",
+                    content: "Autre document pertinent avec des informations complémentaires depuis votre collection locale.",
                     source: "document2.pdf",
                     score: 0.87
                 }
@@ -184,72 +183,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Fonction de génération réelle de réponse
-    async function generateResponseReal(question, context, config, analyseData) {
+    // Fonction de génération avec Ollama
+    async function generateResponseOllama(question, context, config, analyseData) {
         try {
-            let apiUrl, headers, body;
+            const prompt = `${config.systemPrompt}\n\nContexte:\n${context}\n\nQuestion: ${question}\n\nRéponse:`;
             
-            if (config.llmModel.startsWith('gpt')) {
-                // OpenAI API
-                apiUrl = 'https://api.openai.com/v1/chat/completions';
-                headers = {
-                    'Authorization': `Bearer ${analyseData.openaiKey}`,
-                    'Content-Type': 'application/json'
-                };
-                body = {
-                    model: config.llmModel,
-                    messages: [
-                        { role: 'system', content: config.systemPrompt },
-                        { role: 'user', content: config.userPromptTemplate.replace('{context}', context).replace('{question}', question) }
-                    ],
-                    temperature: config.temperature,
-                    max_tokens: config.maxTokens
-                };
-            } else if (config.llmModel.startsWith('claude')) {
-                // Anthropic API
-                apiUrl = 'https://api.anthropic.com/v1/messages';
-                headers = {
-                    'x-api-key': analyseData.anthropicKey,
-                    'Content-Type': 'application/json',
-                    'anthropic-version': '2023-06-01'
-                };
-                body = {
-                    model: config.llmModel,
-                    max_tokens: config.maxTokens,
-                    temperature: config.temperature,
-                    messages: [
-                        { role: 'user', content: `${config.systemPrompt}\n\n${config.userPromptTemplate.replace('{context}', context).replace('{question}', question)}` }
-                    ]
-                };
-            } else {
-                throw new Error('Modèle non supporté');
-            }
-            
-            const response = await fetch(apiUrl, {
+            const response = await fetch(`${analyseData.ollamaUrl}/api/generate`, {
                 method: 'POST',
-                headers: headers,
-                body: JSON.stringify(body)
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: config.llmModel,
+                    prompt: prompt,
+                    temperature: config.temperature,
+                    max_tokens: config.maxTokens,
+                    stream: false
+                })
             });
             
             if (!response.ok) {
-                throw new Error(`Erreur API: ${response.status}`);
+                throw new Error(`Erreur Ollama: ${response.status}`);
             }
             
             const data = await response.json();
             
-            let responseText, tokens;
-            if (config.llmModel.startsWith('gpt')) {
-                responseText = data.choices[0].message.content;
-                tokens = data.usage.total_tokens;
-            } else if (config.llmModel.startsWith('claude')) {
-                responseText = data.content[0].text;
-                tokens = data.usage.input_tokens + data.usage.output_tokens;
-            }
-            
             return {
-                response: responseText,
+                response: data.response,
                 sources: context.split('\n').slice(0, 3),
-                tokens: tokens
+                tokens: data.prompt_eval_count + data.eval_count
             };
             
         } catch (error) {

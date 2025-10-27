@@ -62,12 +62,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="embeddingModel">Modèle d'embeddings</label>
+                        <label for="embeddingModel">Modèle d'embeddings Ollama</label>
                         <select id="embeddingModel" name="embeddingModel">
-                            <option value="text-embedding-ada-002">text-embedding-ada-002</option>
-                            <option value="text-embedding-3-small">text-embedding-3-small</option>
-                            <option value="text-embedding-3-large">text-embedding-3-large</option>
+                            <option value="nomic-embed-text">nomic-embed-text</option>
+                            <option value="mxbai-embed-large">mxbai-embed-large</option>
+                            <option value="all-minilm">all-minilm</option>
                         </select>
+                        <small class="help-text">Le modèle sera chargé depuis votre configuration précédente</small>
                     </div>
 
                     <div class="form-group">

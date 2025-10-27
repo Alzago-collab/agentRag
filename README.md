@@ -77,7 +77,7 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 - [x] Export rag_config.json fonctionnel
 
 ### Sprint 1 (Fonctionnel)
-- [x] Intégration APIs réelles (OpenAI, Anthropic)
+- [x] Intégration Ollama local (embeddings + génération)
 - [x] Traitement réel des documents et embeddings
 - [x] Export ZIP du projet généré
 - [x] Documentation utilisateur minimale
@@ -88,11 +88,23 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 - [ ] Pipelines d'ingestion automatisés
 
 ## 🛠️ Instructions d'utilisation (rapide)
-1. Cloner le repo.
-2. Démarrer un serveur statique (ex. `npx http-server` ou `live-server`).
-3. Ouvrir index.html dans le navigateur.
-4. Suivre les étapes et remplir les formulaires.
-5. À la fin, cliquer sur Exporter pour récupérer rag_config.json ou ZIP.
+
+**Prérequis :**
+1. Installer Ollama : https://ollama.ai/
+2. Installer les modèles requis :
+   ```bash
+   ollama pull nomic-embed-text
+   ollama pull llama3.1
+   ollama pull mistral
+   ```
+
+**Utilisation :**
+1. Cloner le repo
+2. Démarrer Ollama : `ollama serve`
+3. Démarrer un serveur statique : `python3 -m http.server 8000`
+4. Ouvrir http://localhost:8000 dans le navigateur
+5. Suivre les étapes et remplir les formulaires
+6. À la fin, cliquer sur Exporter pour récupérer rag_config.json ou ZIP
 
 ## 💡 Astuces pour l'équipe
 - Héberger le repo sur GitHub pour profiter des cases cochables dans la vue README.

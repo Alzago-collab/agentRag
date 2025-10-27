@@ -106,24 +106,28 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('input', autoSave);
     form.addEventListener('change', autoSave);
     
-    // Gestionnaire de changement de type de base vectorielle
-    const vectorDbTypeSelect = document.getElementById('vectorDbType');
-    const pineconeConfig = document.getElementById('pineconeConfig');
-    const weaviateConfig = document.getElementById('weaviateConfig');
-    
-    if (vectorDbTypeSelect) {
-        vectorDbTypeSelect.addEventListener('change', function() {
-            // Masquer toutes les configurations
-            if (pineconeConfig) pineconeConfig.style.display = 'none';
-            if (weaviateConfig) weaviateConfig.style.display = 'none';
-            
-            // Afficher la configuration appropriée
-            if (this.value === 'pinecone' && pineconeConfig) {
-                pineconeConfig.style.display = 'block';
-            } else if (this.value === 'weaviate' && weaviateConfig) {
-                weaviateConfig.style.display = 'block';
-            }
+    // Test de connexion Ollama
+    const ollamaUrlField = document.getElementById('ollamaUrl');
+    if (ollamaUrlField) {
+        ollamaUrlField.addEventListener('blur', function() {
+            testOllamaConnection(this.value);
         });
+    }
+    
+    // Fonction pour tester la connexion Ollama
+    async function testOllamaConnection(url) {
+        if (!url.trim()) return;
+        
+        try {
+            const response = await fetch(`${url}/api/tags`);
+            if (response.ok) {
+                Utils.showSuccess('Connexion Ollama réussie !');
+            } else {
+                Utils.showError('Impossible de se connecter à Ollama. Vérifiez que le service est démarré.');
+            }
+        } catch (error) {
+            Utils.showError('Erreur de connexion Ollama: ' + error.message);
+        }
     }
     
     // Génération automatique du nom de collection

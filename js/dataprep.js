@@ -140,10 +140,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Vérifier les clés API
+        // Vérifier la configuration Ollama
         const analyseData = dataManager.getPhaseData('analyse');
-        if (!analyseData.openaiKey) {
-            Utils.showError('Clé API OpenAI requise pour les embeddings');
+        if (!analyseData.ollamaUrl) {
+            Utils.showError('URL Ollama requise pour les embeddings');
             return;
         }
         
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 results.totalChunks += chunks.length;
                 
                 // Créer les embeddings pour chaque chunk
-                const embeddings = await createEmbeddings(chunks, embeddingModel, analyseData.openaiKey);
+                const embeddings = await createEmbeddingsOllama(chunks, embeddingModel, analyseData.ollamaUrl);
                 results.totalVectors += embeddings.length;
                 
                 results.processedFiles.push({
@@ -273,32 +273,31 @@ document.addEventListener('DOMContentLoaded', function() {
         return chunks;
     }
     
-    // Fonction pour créer les embeddings
-    async function createEmbeddings(chunks, model, apiKey) {
+    // Fonction pour créer les embeddings avec Ollama
+    async function createEmbeddingsOllama(chunks, model, ollamaUrl) {
         const embeddings = [];
         
         for (const chunk of chunks) {
             try {
-                const response = await fetch('https://api.openai.com/v1/embeddings', {
+                const response = await fetch(`${ollamaUrl}/api/embeddings`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         model: model,
-                        input: chunk
+                        prompt: chunk
                     })
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`Erreur API OpenAI: ${response.status}`);
+                    throw new Error(`Erreur Ollama: ${response.status}`);
                 }
                 
                 const data = await response.json();
                 embeddings.push({
                     text: chunk,
-                    embedding: data.data[0].embedding
+                    embedding: data.embedding
                 });
                 
             } catch (error) {
