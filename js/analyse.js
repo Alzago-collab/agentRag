@@ -106,6 +106,26 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('input', autoSave);
     form.addEventListener('change', autoSave);
     
+    // Gestionnaire de changement de type de base vectorielle
+    const vectorDbTypeSelect = document.getElementById('vectorDbType');
+    const pineconeConfig = document.getElementById('pineconeConfig');
+    const weaviateConfig = document.getElementById('weaviateConfig');
+    
+    if (vectorDbTypeSelect) {
+        vectorDbTypeSelect.addEventListener('change', function() {
+            // Masquer toutes les configurations
+            if (pineconeConfig) pineconeConfig.style.display = 'none';
+            if (weaviateConfig) weaviateConfig.style.display = 'none';
+            
+            // Afficher la configuration appropriée
+            if (this.value === 'pinecone' && pineconeConfig) {
+                pineconeConfig.style.display = 'block';
+            } else if (this.value === 'weaviate' && weaviateConfig) {
+                weaviateConfig.style.display = 'block';
+            }
+        });
+    }
+    
     // Génération automatique du nom de collection
     const entrepriseField = document.getElementById('entreprise');
     const collectionNameField = document.getElementById('collectionName');

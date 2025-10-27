@@ -61,16 +61,31 @@
                         </select>
                     </div>
 
-                    <button id="processBtn" class="btn btn-primary">Traiter les documents</button>
+                    <div class="form-group">
+                        <label for="embeddingModel">Modèle d'embeddings</label>
+                        <select id="embeddingModel" name="embeddingModel">
+                            <option value="text-embedding-ada-002">text-embedding-ada-002</option>
+                            <option value="text-embedding-3-small">text-embedding-3-small</option>
+                            <option value="text-embedding-3-large">text-embedding-3-large</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collectionName">Nom de la collection vectorielle</label>
+                        <input type="text" id="collectionName" name="collectionName" 
+                               placeholder="Ex: documents-entreprise-2025" required>
+                    </div>
+
+                    <button id="processBtn" class="btn btn-primary">Traiter et indexer les documents</button>
                 </div>
 
                 <div class="results-section" id="resultsSection" style="display: none;">
-                    <h3>Résultats du traitement</h3>
+                    <h3>Résultats du traitement et indexation</h3>
                     <div id="processingResults"></div>
                     
                     <div class="form-actions">
                         <button type="button" id="backBtn" class="btn btn-secondary">Retour</button>
-                        <button type="button" id="continueBtn" class="btn btn-primary">Continuer vers l'indexation</button>
+                        <button type="button" id="continueBtn" class="btn btn-primary">Continuer vers le moteur RAG</button>
                     </div>
                 </div>
             </div>

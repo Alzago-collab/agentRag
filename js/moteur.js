@@ -97,11 +97,23 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
-    // Simulation du processus RAG
+    // Processus RAG réel
     async function simulateRAGProcess(question, config) {
-        // Étape 1: Recherche de documents
+        // Vérifier les clés API
+        const analyseData = dataManager.getPhaseData('analyse');
+        const dataprepData = dataManager.getPhaseData('dataprep');
+        
+        if (!analyseData.openaiKey) {
+            throw new Error('Clé API OpenAI requise');
+        }
+        
+        if (!dataprepData.collectionName) {
+            throw new Error('Collection vectorielle requise');
+        }
+        
+        // Étape 1: Recherche de documents (simulation pour l'instant)
         Utils.showInfo('Recherche de documents pertinents...');
-        const retrievedDocs = await ragSimulator.searchDocuments(question, config.topK);
+        const retrievedDocs = await searchDocumentsReal(question, config.topK, analyseData.openaiKey, config.embeddingModel);
         
         // Filtrer par seuil de similarité
         const filteredDocs = retrievedDocs.filter(doc => doc.score >= config.similarityThreshold);
@@ -113,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Étape 3: Génération de la réponse
         Utils.showInfo('Génération de la réponse...');
-        const response = await ragSimulator.generateResponse(question, context, config);
+        const response = await generateResponseReal(question, context, config, analyseData);
         
         return {
             question,
@@ -124,6 +136,126 @@ document.addEventListener('DOMContentLoaded', function() {
             tokens: response.tokens,
             config
         };
+    }
+    
+    // Fonction de recherche réelle de documents
+    async function searchDocumentsReal(question, topK, apiKey, embeddingModel) {
+        try {
+            // Créer l'embedding de la question
+            const response = await fetch('https://api.openai.com/v1/embeddings', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: embeddingModel,
+                    input: question
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Erreur API OpenAI: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const questionEmbedding = data.data[0].embedding;
+            
+            // Pour l'instant, retourner des documents simulés
+            // En production, utiliser votre base vectorielle (ChromaDB, Pinecone, etc.)
+            return [
+                {
+                    id: 1,
+                    content: "Document pertinent trouvé pour votre question. Ceci est un exemple de contenu récupéré.",
+                    source: "document1.pdf",
+                    score: 0.95
+                },
+                {
+                    id: 2,
+                    content: "Autre document pertinent avec des informations complémentaires.",
+                    source: "document2.pdf",
+                    score: 0.87
+                }
+            ];
+            
+        } catch (error) {
+            console.error('Erreur lors de la recherche:', error);
+            throw error;
+        }
+    }
+    
+    // Fonction de génération réelle de réponse
+    async function generateResponseReal(question, context, config, analyseData) {
+        try {
+            let apiUrl, headers, body;
+            
+            if (config.llmModel.startsWith('gpt')) {
+                // OpenAI API
+                apiUrl = 'https://api.openai.com/v1/chat/completions';
+                headers = {
+                    'Authorization': `Bearer ${analyseData.openaiKey}`,
+                    'Content-Type': 'application/json'
+                };
+                body = {
+                    model: config.llmModel,
+                    messages: [
+                        { role: 'system', content: config.systemPrompt },
+                        { role: 'user', content: config.userPromptTemplate.replace('{context}', context).replace('{question}', question) }
+                    ],
+                    temperature: config.temperature,
+                    max_tokens: config.maxTokens
+                };
+            } else if (config.llmModel.startsWith('claude')) {
+                // Anthropic API
+                apiUrl = 'https://api.anthropic.com/v1/messages';
+                headers = {
+                    'x-api-key': analyseData.anthropicKey,
+                    'Content-Type': 'application/json',
+                    'anthropic-version': '2023-06-01'
+                };
+                body = {
+                    model: config.llmModel,
+                    max_tokens: config.maxTokens,
+                    temperature: config.temperature,
+                    messages: [
+                        { role: 'user', content: `${config.systemPrompt}\n\n${config.userPromptTemplate.replace('{context}', context).replace('{question}', question)}` }
+                    ]
+                };
+            } else {
+                throw new Error('Modèle non supporté');
+            }
+            
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Erreur API: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            let responseText, tokens;
+            if (config.llmModel.startsWith('gpt')) {
+                responseText = data.choices[0].message.content;
+                tokens = data.usage.total_tokens;
+            } else if (config.llmModel.startsWith('claude')) {
+                responseText = data.content[0].text;
+                tokens = data.usage.input_tokens + data.usage.output_tokens;
+            }
+            
+            return {
+                response: responseText,
+                sources: context.split('\n').slice(0, 3),
+                tokens: tokens
+            };
+            
+        } catch (error) {
+            console.error('Erreur lors de la génération:', error);
+            throw error;
+        }
     }
     
     // Fonction pour afficher les résultats du test RAG

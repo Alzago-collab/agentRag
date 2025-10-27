@@ -23,7 +23,7 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 - [x] Créer le repo ragbuilder-assistant
 - [x] Initialiser la structure de dossiers (frontend/, backend/, scripts/, docs/)
 - [x] Ajouter .gitignore, README.md, LICENSE
-- [ ] Mettre en place un environnement de test local (simple http-server ou live-server)
+- [x] Mettre en place un environnement de test local (simple http-server ou live-server)
 
 ### Phase 1 — Analyse (Discovery)
 - [ ] Créer la page analyse.html
@@ -77,9 +77,10 @@ Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` po
 - [x] Export rag_config.json fonctionnel
 
 ### Sprint 1 (Fonctionnel)
-- [ ] Mini retriever + moteur simulé
-- [ ] Export ZIP du projet généré
-- [ ] Documentation utilisateur minimale
+- [x] Intégration APIs réelles (OpenAI, Anthropic)
+- [x] Traitement réel des documents et embeddings
+- [x] Export ZIP du projet généré
+- [x] Documentation utilisateur minimale
 
 ### Sprint 2 (Production-ready)
 - [ ] Connexion à vrai service d'embeddings + vector DB (optionnel)

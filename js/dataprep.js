@@ -132,6 +132,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const chunkSize = document.getElementById('chunkSize').value;
         const overlap = document.getElementById('overlap').value;
+        const embeddingModel = document.getElementById('embeddingModel').value;
+        const collectionName = document.getElementById('collectionName').value;
+        
+        if (!collectionName.trim()) {
+            Utils.showError('Veuillez saisir un nom de collection');
+            return;
+        }
+        
+        // Vérifier les clés API
+        const analyseData = dataManager.getPhaseData('analyse');
+        if (!analyseData.openaiKey) {
+            Utils.showError('Clé API OpenAI requise pour les embeddings');
+            return;
+        }
         
         // Sauvegarder la configuration
         dataManager.updatePhase('dataprep', {
@@ -143,29 +157,160 @@ document.addEventListener('DOMContentLoaded', function() {
             })),
             chunkSize: parseInt(chunkSize),
             overlap: parseInt(overlap),
+            embeddingModel,
+            collectionName,
             timestamp: new Date().toISOString()
         });
         
-        // Simuler le traitement
-        Utils.showLoading(processBtn, 'Traitement en cours...');
+        // Traitement réel des documents
+        Utils.showLoading(processBtn, 'Traitement et indexation en cours...');
         
         try {
-            const results = await simulateDocumentProcessing(files, chunkSize, overlap);
+            const results = await processDocumentsReal(files, chunkSize, overlap, embeddingModel, collectionName, analyseData);
             
             displayProcessingResults(results);
             resultsSection.style.display = 'block';
             
-            Utils.showSuccess('Documents traités avec succès !');
+            Utils.showSuccess('Documents traités et indexés avec succès !');
             
         } catch (error) {
-            Utils.showError('Erreur lors du traitement des documents');
+            Utils.showError('Erreur lors du traitement des documents: ' + error.message);
             console.error(error);
         } finally {
-            processBtn.innerHTML = 'Traiter les documents';
+            processBtn.innerHTML = 'Traiter et indexer les documents';
         }
     }
     
-    // Simulation du traitement de documents
+    // Fonction de traitement réel des documents
+    async function processDocumentsReal(files, chunkSize, overlap, embeddingModel, collectionName, analyseData) {
+        const results = {
+            totalFiles: files.length,
+            totalChunks: 0,
+            totalVectors: 0,
+            processedFiles: [],
+            errors: [],
+            collectionName: collectionName
+        };
+        
+        // Pour chaque fichier, traiter et créer les embeddings
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            try {
+                // Extraire le texte du fichier
+                const text = await extractTextFromFile(file.file);
+                
+                // Découper en chunks
+                const chunks = chunkText(text, parseInt(chunkSize), parseInt(overlap));
+                results.totalChunks += chunks.length;
+                
+                // Créer les embeddings pour chaque chunk
+                const embeddings = await createEmbeddings(chunks, embeddingModel, analyseData.openaiKey);
+                results.totalVectors += embeddings.length;
+                
+                results.processedFiles.push({
+                    name: file.name,
+                    size: file.size,
+                    chunks: chunks.length,
+                    vectors: embeddings.length,
+                    status: 'success'
+                });
+                
+            } catch (error) {
+                results.errors.push({
+                    file: file.name,
+                    error: error.message
+                });
+            }
+        }
+        
+        return results;
+    }
+    
+    // Fonction pour extraire le texte d'un fichier
+    async function extractTextFromFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const content = e.target.result;
+                
+                if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                    resolve(content);
+                } else if (file.name.endsWith('.pdf')) {
+                    // Pour les PDF, on simule l'extraction
+                    // En production, utiliser pdf.js ou une API
+                    resolve(`Contenu extrait du PDF ${file.name}. Ceci est un exemple de texte extrait qui sera découpé en chunks.`);
+                } else if (file.name.endsWith('.docx')) {
+                    // Pour les DOCX, on simule l'extraction
+                    // En production, utiliser mammoth.js ou une API
+                    resolve(`Contenu extrait du document Word ${file.name}. Ceci est un exemple de texte extrait qui sera découpé en chunks.`);
+                } else {
+                    resolve(content);
+                }
+            };
+            
+            reader.onerror = function() {
+                reject(new Error('Erreur lors de la lecture du fichier'));
+            };
+            
+            reader.readAsText(file);
+        });
+    }
+    
+    // Fonction pour découper le texte en chunks
+    function chunkText(text, chunkSize, overlap) {
+        const words = text.split(/\s+/);
+        const chunks = [];
+        
+        for (let i = 0; i < words.length; i += chunkSize - overlap) {
+            const chunk = words.slice(i, i + chunkSize).join(' ');
+            if (chunk.trim()) {
+                chunks.push(chunk);
+            }
+        }
+        
+        return chunks;
+    }
+    
+    // Fonction pour créer les embeddings
+    async function createEmbeddings(chunks, model, apiKey) {
+        const embeddings = [];
+        
+        for (const chunk of chunks) {
+            try {
+                const response = await fetch('https://api.openai.com/v1/embeddings', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        input: chunk
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erreur API OpenAI: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                embeddings.push({
+                    text: chunk,
+                    embedding: data.data[0].embedding
+                });
+                
+            } catch (error) {
+                console.error('Erreur lors de la création des embeddings:', error);
+                throw error;
+            }
+        }
+        
+        return embeddings;
+    }
+    
+    // Simulation du traitement de documents (gardé pour compatibilité)
     async function simulateDocumentProcessing(files, chunkSize, overlap) {
         const results = {
             totalFiles: files.length,

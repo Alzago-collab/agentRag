@@ -31,10 +31,17 @@
                             <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                             <option value="gpt-4" selected>GPT-4</option>
                             <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-4o">GPT-4o</option>
                             <option value="claude-3-sonnet">Claude 3 Sonnet</option>
                             <option value="claude-3-opus">Claude 3 Opus</option>
-                            <option value="local">Modèle local (Ollama)</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anthropicKey">Clé API Anthropic (si Claude)</label>
+                        <input type="password" id="anthropicKey" name="anthropicKey" 
+                               placeholder="sk-ant-..." class="api-key-field">
+                        <small class="help-text">Obligatoire si vous utilisez Claude</small>
                     </div>
 
                     <div class="form-group">
