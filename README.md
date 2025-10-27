@@ -1,169 +1,195 @@
-# RAGBuilder Assistant — README (FR)
+# 🧠 RAGBuilder Assistant (Local + Ollama Edition)
 
 ## 🎯 Objectif du projet
-RAGBuilder Assistant est une plateforme web légère (HTML + JS + CSS) qui guide un employé, pas à pas, pour créer un chatbot RAG (Retrieval-Augmented Generation) personnalisé pour une entreprise.
+RAGBuilder Assistant est une application web locale (HTML + JS + CSS + Ollama) qui guide les employés étape par étape pour créer un chatbot RAG entièrement localisé sur leur machine.
 
-Le but : standardiser et automatiser le processus afin que n'importe quel membre de l'équipe puisse suivre la méthode et générer un projet RAG opérationnel (config, scripts, export).
+**Aucune dépendance cloud** : toutes les opérations (embedding, retrieval, génération) sont effectuées via Ollama installé sur le poste.
 
-## 🧭 Vue d'ensemble des phases
-Le procédé est divisé en 6 phases :
+L'objectif est d'avoir un processus standardisé qu'une entreprise peut suivre facilement, jusqu'à l'obtention d'un chatbot prêt à utiliser, connecté à sa propre base documentaire.
 
-1. **Analyse (Discovery)** — comprendre l'usage et les sources.
-2. **Préparation des données (DataPrep)** — extraction, nettoyage, découpage.
-3. **Indexation (Vectorisation)** — embeddings + stockage vectoriel.
-4. **Moteur RAG** — retrieval + génération, prompt templates.
-5. **Interface & déploiement** — UI, authentification, hébergement.
-6. **Maintenance & formation** — pipelines, docs, formation des employés.
+## ⚙️ Technologies utilisées
 
-## ✅ Checklist complète (cochable)
-Sur GitHub / GitLab / Bitbucket, les cases ci-dessous sont cliquables.
-Localement, tu peux éditer ce fichier README.md et remplacer `[ ]` par `[x]` pour marquer comme fait.
+| Fonction | Technologie |
+|----------|------------|
+| Moteur LLM & Embeddings | Ollama |
+| Langage & Interface | HTML, CSS, JavaScript pur |
+| Serveur local Ollama | localhost:11434 |
+| Vectorisation | `ollama embed` |
+| Sauvegarde | localStorage + fichiers .json |
+| Export du projet | JSZip (génération ZIP dans le navigateur) |
 
-### Phase 0 — Préparation du projet
-- [x] Créer le repo ragbuilder-assistant
-- [x] Initialiser la structure de dossiers (frontend/, backend/, scripts/, docs/)
-- [x] Ajouter .gitignore, README.md, LICENSE
-- [x] Mettre en place un environnement de test local (simple http-server ou live-server)
+## 🧭 Phases du projet
 
-### Phase 1 — Analyse (Discovery)
-- [ ] Créer la page analyse.html
-- [ ] Concevoir le formulaire des besoins (nom entreprise, cas d'usage, sources, ton)
-- [ ] Mettre en place sauvegarde locale (localStorage) pour l'étape
-- [ ] Générer le fichier ragbrief.json à partir des réponses
-- [ ] Valider workflow : démarrer → remplir → sauvegarder → passer à dataprep
+### 1️⃣ Analyse (Discovery)
+**Objectif** : définir les besoins de l'entreprise.  
+**Interface** : `analyse.html`
 
-### Phase 2 — Préparation des données (DataPrep)
-- [ ] Créer la page dataprep.html
-- [ ] Autoriser upload de fichiers (PDF, DOCX, ZIP) côté frontend
-- [ ] Écrire script JS de prévisualisation / extraction basique (texte brut)
-- [ ] Implémenter découpage en chunks (par paragraphe ou N tokens)
-- [ ] Sauvegarder métadonnées (source, date, titre) dans data/cleaned/ (simulé via JSON)
-- [ ] Ajouter vérification et correction manuelle des extractions
+- Formulaire (nom de l'entreprise, domaine, objectifs, types de documents)
+- Enregistrement automatique dans `config/project.json`
+- Prévisualisation du plan RAG
 
-### Phase 3 — Indexation (Vectorisation)
-- [ ] Créer la page indexation.html
-- [ ] Permettre le choix du modèle d'embeddings (optionnel : liste statique)
-- [ ] Implémenter appel simulé à un service d'embeddings (mock ou API)
-- [ ] Générer et stocker les vecteurs (fichier JSON/vector_store.json pour la version JS)
-- [ ] Ajouter interface de statut/progression et logs
+**✅ Sortie** :
+```json
+{
+  "entreprise": "NomEntreprise",
+  "secteur": "Automobile",
+  "objectif": "Support client",
+  "langue": "fr",
+  "model": "mistral",
+  "embedding_model": "nomic-embed-text"
+}
+```
 
-### Phase 4 — Moteur RAG
-- [ ] Créer la page moteur.html
-- [ ] Définir le template de prompt RAG (system + context + question)
-- [ ] Implémenter un retriever simple (recherche par similarité sur vecteurs mock)
-- [ ] Intégrer un test de génération (simulation LLM ou appel réel si dispo)
-- [ ] Afficher les sources / citations avec chaque réponse
+### 2️⃣ Préparation des données (DataPrep)
+**Objectif** : nettoyer et préparer les fichiers.  
+**Interface** : `dataprep.html`
 
-### Phase 5 — Interface & déploiement
-- [ ] Créer la page interface.html (choix UI, thème)
-- [ ] Implémenter le mini-chat de test (frontend uniquement)
-- [ ] Ajouter export : rag_config.json + structure projet zippée
-- [ ] Ajouter instructions de déploiement (Docker / simple hébergement statique)
-- [ ] Intégrer une page recap.html et un bouton "Générer le projet"
+- Upload de fichiers .txt, .pdf, .docx (avec pdf.js)
+- Extraction du texte brut
+- Nettoyage automatique (espaces, retours de ligne)
+- Sauvegarde dans `/data/processed/*.txt`
 
-### Phase 6 — Maintenance & formation
-- [ ] Rédiger RAGBuilder_Methodologie.md (mode d'emploi pour employés)
-- [ ] Créer CheckList_Projet.pdf (exportable)
-- [ ] Préparer une courte vidéo / slides de formation (ou script)
-- [ ] Mettre en place un système de versioning pour les datasets
-- [ ] Planifier pipeline d'actualisation (cron / webhook) pour réindexation
+**✅ Sortie** :
+`/data/processed/text_cleaned.json`
 
-## 📦 Livrables par sprint (1 sprint = version minimale utilisable)
+### 3️⃣ Indexation locale (Vectorisation avec Ollama)
+**Objectif** : transformer les documents en embeddings stockés localement.  
+**Interface** : `indexation.html`
 
-### Sprint 0 (MVP)
-- [x] index.html, analyse.html, dataprep.html, recap.html
-- [x] js/main.js, js/analyse.js, js/dataprep.js, js/recap.js
-- [x] css/style.css
-- [x] Export rag_config.json fonctionnel
+- Lecture des fichiers nettoyés
+- Découpage en chunks (par 400–600 tokens)
+- Envoi à l'API Ollama :
+  ```
+  POST http://localhost:11434/api/embeddings
+  {
+    "model": "nomic-embed-text",
+    "prompt": "Texte à vectoriser"
+  }
+  ```
+- Réception du vecteur → stockage dans `/data/vectors.json`
 
-### Sprint 1 (Fonctionnel)
-- [x] Intégration Ollama local (embeddings + génération)
-- [x] Traitement réel des documents et embeddings
-- [x] Export ZIP du projet généré
-- [x] Documentation utilisateur minimale
+**✅ Sortie** :
+```json
+[
+  {
+    "id": 1,
+    "text": "Le support client doit répondre aux FAQ...",
+    "vector": [0.012, -0.053, ...]
+  }
+]
+```
 
-### Sprint 2 (Production-ready)
-- [ ] Connexion à vrai service d'embeddings + vector DB (optionnel)
-- [ ] Auth & multi-utilisateurs
-- [ ] Pipelines d'ingestion automatisés
+### 4️⃣ Moteur RAG local (Retrieval + Generation)
+**Objectif** : construire le cœur du chatbot.  
+**Interface** : `moteur.html`
 
-## 🛠️ Instructions d'utilisation (rapide)
-
-**Prérequis :**
-1. Installer Ollama : https://ollama.ai/
-2. Installer les modèles requis :
-   ```bash
-   ollama pull nomic-embed-text
-   ollama pull llama3.1
-   ollama pull mistral
+**Fonctionnement JS** :
+1. L'utilisateur pose une question.
+2. Le texte de la question est envoyé à :
    ```
+   POST /api/embeddings { "model": "nomic-embed-text", "prompt": "..." }
+   ```
+3. Calcul de la similarité cosinus entre la question et chaque vecteur du store local.
+4. Sélection des 3 passages les plus pertinents.
+5. Envoi au modèle LLM :
+   ```
+   POST /api/generate
+   {
+     "model": "mistral",
+     "prompt": "Contexte : ... \nQuestion : ..."
+   }
+   ```
+6. Le modèle répond à partir du contexte.
 
-**Utilisation :**
-1. Cloner le repo
-2. Démarrer Ollama : `ollama serve`
-3. Démarrer un serveur statique : `python3 -m http.server 8000`
-4. Ouvrir http://localhost:8000 dans le navigateur
-5. Suivre les étapes et remplir les formulaires
-6. À la fin, cliquer sur Exporter pour récupérer rag_config.json ou ZIP
+**✅ Sortie** : une réponse contextualisée affichée dans l'interface.
 
-## 💡 Astuces pour l'équipe
-- Héberger le repo sur GitHub pour profiter des cases cochables dans la vue README.
-- Pour un suivi plus avancé, intégrer la checklist dans un board (GitHub Projects, Trello).
-- Former 1 personne « lead RAG » par équipe pendant 1 sprint, puis lancer la formation interne.
+### 5️⃣ Interface utilisateur (Chatbot)
+**Interface** : `interface.html`
 
-## 🔐 Sécurité & confidentialité
-- Ne stocker jamais de données sensibles non chiffrées dans des services externes sans accord.
-- Pour la production, utiliser un stockage sécurisé (S3 / Supabase Storage) et accès restreint.
-- Documenter les règles d'accès et retention des données dans docs/.
+- Champ de saisie utilisateur
+- Affichage des bulles de discussion
+- Historique sauvegardé dans localStorage
+- Bouton Exporter → création d'un ZIP contenant :
+  - `rag_config.json`
+  - `vectors.json`
+  - `chatbot.html`
+  - `chatbot.js`
 
-## ✍️ Contribution & gouvernance
-- Branches : main (stable), dev (features), hotfix/* (correctifs).
-- PRs doivent inclure une checklist de tests.
-- Ajouter tests unitaires simples côté JS pour les fonctions critiques (parsing, export).
+**✅ Sortie** :
+Un chatbot complet et autonome, prêt à livrer à l'entreprise.
 
-## 📚 Structure du projet
+### 6️⃣ Maintenance & formation
+**Interface** : `maintenance.html`
+
+- Rafraîchir les embeddings (si ajout de documents)
+- Export/Import du projet
+- Documentation intégrée (`docs/guide.html`)
+- Système de mise à jour du modèle Ollama
+
+## 🧱 Structure du projet
 
 ```
-ragbuilder-assistant/
+ragbuilder-ollama/
 │
-├── index.html                # Page d'accueil
-├── analyse.html              # Étape 1 : Analyse des besoins
-├── dataprep.html             # Étape 2 : Préparation des données
-├── indexation.html           # Étape 3 : Vectorisation
-├── moteur.html               # Étape 4 : Moteur RAG
-├── interface.html             # Étape 5 : Interface / déploiement
-├── recap.html                # Étape finale : Résumé et export
-│
-├── css/
-│   └── style.css             # Styles CSS principaux
+├── index.html
+├── analyse.html
+├── dataprep.html
+├── indexation.html
+├── moteur.html
+├── interface.html
+├── maintenance.html
 │
 ├── js/
-│   ├── main.js               # Gestion de la navigation et logique globale
-│   ├── analyse.js            # Logique spécifique à l'étape Analyse
-│   ├── dataprep.js           # Logique de préparation des données
-│   ├── indexation.js         # Logique d'indexation vectorielle
-│   ├── moteur.js             # Logique du moteur RAG
-│   ├── interface.js          # Logique de l'interface utilisateur
-│   └── recap.js              # Logique de finalisation et export
+│   ├── analyse.js
+│   ├── dataprep.js
+│   ├── vectorizer.js
+│   ├── rag_engine.js
+│   ├── interface.js
+│   ├── maintenance.js
+│   └── utils.js
 │
-└── assets/
-    ├── config/               # Fichiers de configuration
-    │   ├── default-config.json
-    │   └── themes.json
-    ├── icons/                # Icônes de l'interface
-    ├── images/               # Images d'illustration
-    ├── docs/                 # Documentation
-    └── scripts/              # Scripts utilitaires
+├── css/
+│   └── style.css
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   ├── vectors.json
+│   └── config/
+│       └── project.json
+│
+└── docs/
+    └── guide.html
 ```
 
-## 📚 Fichiers importants
-- `index.html` — accueil
-- `analyse.html` — étape 1
-- `dataprep.html` — étape 2
-- `indexation.html` — étape 3
-- `moteur.html` — étape 4
-- `interface.html` — étape 5
-- `recap.html` — résumé & export
-- `css/style.css` — styles
-- `js/*.js` — logique front-end
-- `assets/config/` — fichiers de configuration
+## 💻 Fonctionnement local complet
+
+### ⚙️ Étape 1 : Installer Ollama
+Télécharger et installer depuis [https://ollama.ai](https://ollama.ai)
+
+Puis installer les modèles :
+```bash
+ollama pull mistral
+ollama pull nomic-embed-text
+```
+
+### ⚙️ Étape 2 : Lancer Ollama
+```bash
+ollama serve
+```
+
+Par défaut, il tourne sur `http://localhost:11434`
+
+### ⚙️ Étape 3 : Ouvrir RAGBuilder
+Double-clique simplement sur `index.html`
+
+Toutes les pages fonctionnent dans ton navigateur **sans serveur**.
+
+## 🧠 Exemple de workflow
+
+1. Tu lances Ollama (`ollama serve`)
+2. Tu ouvres `analyse.html` et remplis les infos
+3. Tu charges les documents dans `dataprep.html`
+4. Tu vectorises les textes dans `indexation.html`
+5. Tu testes le chatbot dans `interface.html`
+6. Tu exportes le tout pour livraison à l'entreprise

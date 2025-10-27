@@ -1,0 +1,4 @@
+{
+  "question": "Qu'est-ce qu'un agent RAG?",
+  "réponse": "Un agent RAG combine recherche et génération via LLM."
+}

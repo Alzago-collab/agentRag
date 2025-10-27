@@ -1,0 +1,4 @@
+{
+  "model": "llama3",
+  "search_endpoint": "http://localhost:8080/search"
+}
