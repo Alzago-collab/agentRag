@@ -17,6 +17,7 @@ Ce dossier contient le code source principal :
 - [x] Créer les modules JS principaux
 - [x] Implémenter le pipeline principal du moteur RAG (processRAGQuestion)
 - [x] UI utilisateur complète connectée au moteur (template.html + style + ui.js)
+- [x] Gestion historique conversation (localStorage)
 - [ ] Documenter chaque module
 
 ## 🚩 TODO moteur RAG (`moteur.js`)
@@ -31,4 +32,4 @@ Ce dossier contient le code source principal :
 
 La fonction `processRAGQuestion(question)` réalise l'ensemble de la chaîne : embedding → search topK → construction du prompt → génération de la réponse contextualisée. 
 
-L'interface utilisateur (template.html) permet un cycle complet question (user) → moteur RAG JS → affichage réponse stylée.
+L'interface utilisateur (template.html) permet un cycle complet question (user) → moteur RAG JS → affichage réponse stylée. L’historique du chat est sauvegardé/restauré automatiquement (localStorage).
